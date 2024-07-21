@@ -1,8 +1,11 @@
-/*
+.arcane-word {
+	display: inline-block;
+	white-space: pre;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
+.arcane-character {
+	width: 1ch;
+	display: inline-flex;
+	justify-content: center;
+	color: #9a75ad;
+}

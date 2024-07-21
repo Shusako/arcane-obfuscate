@@ -7,7 +7,11 @@
     "target": "ES6",
     "allowJs": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
+	"resolveJsonModule": true,
+	"noEmit": true,
+	"esModuleInterop": true,
+	"skipLibCheck": true,
     "importHelpers": true,
     "isolatedModules": true,
 	"strictNullChecks": true,
@@ -16,9 +20,11 @@
       "ES5",
       "ES6",
       "ES7"
-    ]
+    ],
+	"types": ["jest"]
   },
   "include": [
     "**/*.ts"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }
