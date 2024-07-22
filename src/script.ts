@@ -6,13 +6,10 @@ export type HtmlArcaneCharacters = {
 }
 
 export const scriptComponent = (
-	serializedArcaneArray: string,
 	characterSet: string,
 	characterChangeRate: number,
 	updateRateMs: number
 ) => {
-	const words: ArcaneWord[] = JSON.parse(serializedArcaneArray)
-
 	function getRandomCharacter (not?: string) {
 		let candidates = characterSet.replace(not ?? '', '')
 		return candidates[Math.floor(Math.random() * candidates.length)]
@@ -21,46 +18,8 @@ export const scriptComponent = (
 	const me = document.currentScript!
 	const parent = me.parentElement!
 
-	// obsidian will prerender all the elements, so when the html exporter
-	// comes through the elements are already rendered.
-	// This check is essentially if(obsidian) { render }
-	// @ts-ignore: Property 'app' does not exist on type 'Window & typeof globalThis'.ts(2339)
-	if (window.app !== undefined) {
-		words.forEach((word: ArcaneWord) => {
-			const arcaneWord = document.createElement('span')
-			arcaneWord.className = 'arcane-word'
-
-			word.forEach((token: ArcaneToken) => {
-				switch (token.type) {
-					case ArcaneTokenType.LENGTH:
-						let num = token.value as number
-
-						for (let i = 0; i < num; i++) {
-							const characterDiv = document.createElement('span')
-							characterDiv.className = 'arcane-character'
-							characterDiv.textContent = getRandomCharacter()
-
-							arcaneWord.appendChild(characterDiv)
-						}
-
-						break
-
-					case ArcaneTokenType.LITERAL_TEXT:
-					case ArcaneTokenType.WHITESPACE:
-						const textNode = document.createTextNode(
-							token.value as string
-						)
-
-						arcaneWord.appendChild(textNode)
-						break
-				}
-			})
-
-			parent.insertBefore(arcaneWord, me)
-		})
-	}
-
-	// discover all arcane characters under this parent
+	// discover all arcane characters under this parent that
+	// should be controlled by this script
 	const htmlArcaneCharacters: HtmlArcaneCharacters[] = []
 
 	const myIndex = Array.from(parent.childNodes).indexOf(me)
@@ -92,10 +51,10 @@ export const scriptComponent = (
 		return this
 	}
 
-	// console.log('creating')
+	// console.log('creating - found ' + length.toString())
 	const intervalId = setInterval(() => {
 		if (!document.body.contains(me)) {
-			// console.log('clearing - no longer exist')
+			// console.log('clearing - no longer exist ' + length)
 			clearInterval(intervalId)
 			return
 		}

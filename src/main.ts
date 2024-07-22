@@ -1,5 +1,5 @@
 import { Plugin, WorkspaceLeaf } from 'obsidian'
-import { ArcaneWord, parseWords } from './arcane'
+import { ArcaneToken, ArcaneTokenType, ArcaneWord, parseWords } from './arcane'
 import { loadSettings, Settings, SettingsTab } from './settings'
 import { createScriptNode, scriptComponent } from './script'
 
@@ -29,20 +29,78 @@ export default class ArcaneObfuscatePlugin extends Plugin {
 	}
 
 	processArcaneContainer (container: HTMLElement, text: string) {
-		const arcaneArray: ArcaneWord[] = parseWords(text)
-
 		// inject some javascript into the document
 		// we do this inside the document so that we support rendering these
 		// files through obsidian to .html and keeping this animation intact
-		const script = createScriptNode(
-			`(${scriptComponent.toString()})('${JSON.stringify(
-				arcaneArray
-			)}', '${this.settings.characterSet}', ${
+		const script: HTMLScriptElement = createScriptNode(
+			`(${scriptComponent.toString()})('${this.settings.characterSet}', ${
 				this.settings.characterChangeRate
 			}, ${this.settings.updateRateMs})`
 		)
 
-		container.parentElement!.replaceChild(script, container)
+		// render out all the elements
+		const words: ArcaneWord[] = parseWords(text)
+		const elements: HTMLElement[] = []
+		words.forEach((word: ArcaneWord) => {
+			const arcaneWord = document.createElement('span')
+			arcaneWord.className = 'arcane-word'
+
+			word.forEach((token: ArcaneToken) => {
+				switch (token.type) {
+					case ArcaneTokenType.LENGTH:
+						let num = token.value as number
+
+						for (let i = 0; i < num; i++) {
+							const characterDiv = document.createElement('span')
+							characterDiv.className = 'arcane-character'
+							characterDiv.textContent =
+								this.settings.characterSet.charAt(
+									Math.floor(
+										Math.random() *
+											this.settings.characterSet.length
+									)
+								)
+
+							arcaneWord.appendChild(characterDiv)
+						}
+
+						break
+
+					case ArcaneTokenType.LITERAL_TEXT:
+					case ArcaneTokenType.WHITESPACE:
+						const textNode = document.createTextNode(
+							token.value as string
+						)
+
+						arcaneWord.appendChild(textNode)
+						break
+				}
+			})
+
+			elements.push(arcaneWord)
+		})
+
+		elements.push(script)
+
+		// first element replaces the container, the rest get inserted
+		// after the previous one
+		// the script needs to be inserted last because it looks for all the
+		// elements we're about to push
+
+		// if somehow only script or empty(??) don't do anything
+		if (elements.length <= 1) return
+
+		let previousElement: HTMLElement = elements.shift()!
+		container.parentElement!.replaceChild(previousElement, container)
+
+		while (elements.length != 0) {
+			let currentElement = elements.shift()!
+			previousElement.parentElement!.insertAfter(
+				currentElement,
+				previousElement
+			)
+			previousElement = currentElement
+		}
 	}
 
 	handleActiveLeafChange (leaf: WorkspaceLeaf | null) {
@@ -51,11 +109,6 @@ export default class ArcaneObfuscatePlugin extends Plugin {
 			// timeout of 10ms is needed to let the html reload in this view
 			// since obsidian will hot-swap the elements back in
 			setTimeout(() => {
-				// remove all existing words as the script will recreate them
-				container.querySelectorAll('.arcane-word').forEach(word => {
-					word.parentElement!.removeChild(word)
-				})
-
 				// when obsidian hot swaps the script element back in, it
 				// doesn't get ran again. so we need to replace the script
 				// with the same everything to kick-start it

@@ -7,7 +7,7 @@ Edit mode:
 Reading mode:
 ![after](https://github.com/user-attachments/assets/f32949f8-daa7-4c93-9e83-86ac984be62e)
 
-This plugin was made to be used in conjunction with [Obsidian Webpage Export](https://github.com/KosmosisDire/obsidian-webpage-export), and that drove a lot of the design decisions. The source text isn't exposed in the resulting HTML (it's actually encoded as a sequence of word-lengths, plain-text of whitespace characters, and plain-text of any characters that were escaped), but because the structure of the text is still there it would still be prone to dictionary/pattern matching attacks (so don't hide things you truly care about with this, they are not perfectly private).
+This plugin was made to be used in conjunction with [Obsidian Webpage Export](https://github.com/KosmosisDire/obsidian-webpage-export), and that drove a lot of the design decisions. The source text isn't exposed in the resulting HTML (it's prerendered as random runic characters with withspace and escaped characters being plain-text), but because the structure of the text is still there it would still be prone to dictionary/pattern matching attacks (so don't hide things you truly care about with this, they are not perfectly private).
 
 # Syntax
 

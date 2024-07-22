@@ -3,9 +3,7 @@
 	"name": "Arcane Obfuscate",
 	"version": "1.0.0",
 	"minAppVersion": "1.6.7",
-	"description": "Add ability to obfuscate text in obsidian in a cool rune effect.",
+	"description": "Add ability to obfuscate text in Obsidian in a cool rune effect.",
 	"author": "Shusako",
-	"authorUrl": "",
-	"fundingUrl": "",
 	"isDesktopOnly": false
 }
