@@ -1,7 +1,7 @@
 {
 	"name": "arcane-obfuscate",
 	"type": "module",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Add ability to obfuscate text in obsidian in a cool rune effect.",
 	"main": "main.js",
 	"scripts": {
