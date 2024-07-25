@@ -51,7 +51,7 @@ export class SettingsTab extends PluginSettingTab {
 		}
 
 		new Setting(containerEl)
-			.setName('Character Set')
+			.setName('Character set')
 			.setDesc(
 				'The set of characters that will be used in the final visual'
 			)
@@ -76,7 +76,7 @@ export class SettingsTab extends PluginSettingTab {
 			)
 
 		new Setting(containerEl)
-			.setName('Character Change Rate')
+			.setName('Character change rate')
 			.setDesc(
 				'The averaged rate that the characters will change. Set to 0 to disable. Set to 100 to always change every character every time.'
 			)
@@ -102,7 +102,7 @@ export class SettingsTab extends PluginSettingTab {
 			)
 
 		new Setting(containerEl)
-			.setName('Character Update Rate Milliseconds')
+			.setName('Character update rate milliseconds')
 			.setDesc('How often (in milliseconds) that the text will change')
 			.addSlider(slider =>
 				slider
