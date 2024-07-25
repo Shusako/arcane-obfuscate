@@ -1,7 +1,7 @@
 {
 	"id": "arcane-obfuscate",
 	"name": "Arcane Obfuscate",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"minAppVersion": "1.6.7",
 	"description": "Obfuscate text with an arcane runic effect.",
 	"author": "Shusako",
